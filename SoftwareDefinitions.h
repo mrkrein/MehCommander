@@ -1,5 +1,8 @@
 #pragma once
 
+const int WinWidth = 1200;
+const int WinHeight = 700;
+
 #define OnMenuClicked 1
 
 LRESULT CALLBACK SoftwareMainProcedure(HWND hWnd, UINT msg, WPARAM wp, LPARAM lp);

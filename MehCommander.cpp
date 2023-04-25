@@ -8,7 +8,7 @@ int APIENTRY wWinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPWSTR lpCmdLine, in
 	if (!RegisterClassW(&SoftwareMainClass)) { return -1; }
 	MSG SoftwareMainMessage = { 0 };
 
-	CreateWindowW(L"MainWndClass", L"Первое окно на WINAPI xD", WS_OVERLAPPEDWINDOW | WS_VISIBLE, 100, 100, 500, 250, NULL, NULL, NULL, NULL);
+	CreateWindowW(L"MainWndClass", L"MehCommander v1.0", WS_OVERLAPPEDWINDOW | WS_VISIBLE, 100, 100, WinWidth, WinHeight, NULL, NULL, NULL, NULL);
 
 	while (GetMessage(&SoftwareMainMessage, NULL, NULL, NULL)) {
 		TranslateMessage(&SoftwareMainMessage);
@@ -51,8 +51,15 @@ LRESULT CALLBACK SoftwareMainProcedure(HWND hWnd, UINT msg, WPARAM wp, LPARAM lp
 
 void MainWndAddMenus(HWND hWnd) {
 	HMENU RootMenu = CreateMenu();
+	HMENU FilesMenu = CreateMenu();
 
-	AppendMenu(RootMenu, MF_STRING, OnMenuClicked, L"OUR MENU");
+	// Основное меню
+	AppendMenu(RootMenu, MF_POPUP, (UINT_PTR)FilesMenu, L"Файлы");	// Пункт меню - Файлы
+	AppendMenu(RootMenu, MF_STRING, OnMenuClicked, L"Сеть");	// Пункт меню - Сеть
+	AppendMenu(RootMenu, MF_STRING, OnMenuClicked, L"Помощь");	// Пункт меню - Помощь
+
+	// Подменю для пункта (Файлы)
+	AppendMenu(FilesMenu, MF_STRING, OnMenuClicked, L"Выход");	// Пункт меню - Файлы
 
 	SetMenu(hWnd, RootMenu);
 }
