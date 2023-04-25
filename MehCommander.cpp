@@ -54,12 +54,14 @@ void MainWndAddMenus(HWND hWnd) {
 	HMENU FilesMenu = CreateMenu();
 
 	// Основное меню
-	AppendMenu(RootMenu, MF_POPUP, (UINT_PTR)FilesMenu, L"Файлы");	// Пункт меню - Файлы
-	AppendMenu(RootMenu, MF_STRING, OnMenuClicked, L"Сеть");	// Пункт меню - Сеть
-	AppendMenu(RootMenu, MF_STRING, OnMenuClicked, L"Помощь");	// Пункт меню - Помощь
+	AppendMenu(RootMenu, MF_POPUP, (UINT_PTR)FilesMenu, L"Файлы");
+	AppendMenu(RootMenu, MF_STRING, OnMenuClicked, L"Сеть");
+	AppendMenu(RootMenu, MF_STRING, OnMenuClicked, L"Помощь");
 
 	// Подменю для пункта (Файлы)
-	AppendMenu(FilesMenu, MF_STRING, OnMenuClicked, L"Выход");	// Пункт меню - Файлы
+	AppendMenu(FilesMenu, MF_STRING, OnMenuClicked, L"Удалить");	// Файлы -> Выход
+	AppendMenu(FilesMenu, MF_SEPARATOR, NULL, NULL);				// Разделитель
+	AppendMenu(FilesMenu, MF_STRING, OnMenuClicked, L"Выход");		// Файлы -> Выход
 
 	SetMenu(hWnd, RootMenu);
 }
