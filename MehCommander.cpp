@@ -59,9 +59,18 @@ void MainWndAddMenus(HWND hWnd) {
 	AppendMenu(RootMenu, MF_STRING, OnMenuClicked, L"Помощь");
 
 	// Подменю для пункта (Файлы)
-	AppendMenu(FilesMenu, MF_STRING, OnMenuClicked, L"Удалить");	// Файлы -> Выход
-	AppendMenu(FilesMenu, MF_SEPARATOR, NULL, NULL);				// Разделитель
-	AppendMenu(FilesMenu, MF_STRING, OnMenuClicked, L"Выход");		// Файлы -> Выход
+	AppendMenu(FilesMenu, MF_STRING, OnMenuClicked, L"Упаковать.. \t Alt+F5");						// Файлы -> Выход
+	AppendMenu(FilesMenu, MF_STRING, OnMenuClicked, L"Распаковать.. \t Alt+F9");					// Файлы -> Выход
+	AppendMenu(FilesMenu, MF_STRING, OnMenuClicked, L"Протестировать архив(ы) \t Shift+Alt+F9");	// Файлы -> Выход
+	AppendMenu(FilesMenu, MF_STRING, OnMenuClicked, L"Разрезать файл..");							// Файлы -> Выход
+	AppendMenu(FilesMenu, MF_STRING, OnMenuClicked, L"Обьеденить файлы..");							// Файлы -> Выход
+	AppendMenu(FilesMenu, MF_STRING, OnMenuClicked, L"Посчитать контрольные суммы..");				// Файлы -> Выход
+	AppendMenu(FilesMenu, MF_STRING, OnMenuClicked, L"Проверить контрольные суммы..");				// Файлы -> Выход
+	AppendMenu(FilesMenu, MF_SEPARATOR, NULL, NULL);												// Разделитель
+	AppendMenu(FilesMenu, MF_STRING, OnMenuClicked, L"Стереть (Wipe) \t Alt+Del");					// Файлы -> Выход
+	AppendMenu(FilesMenu, MF_STRING, OnMenuClicked, L"Удалить \t F8");								// Файлы -> Выход
+	AppendMenu(FilesMenu, MF_SEPARATOR, NULL, NULL);												// Разделитель
+	AppendMenu(FilesMenu, MF_STRING, OnMenuClicked, L"Выход \t Alt+x");								// Файлы -> Выход
 
 	SetMenu(hWnd, RootMenu);
 }
