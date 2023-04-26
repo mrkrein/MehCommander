@@ -1,8 +1,9 @@
-#include <stdio.h>
+#include <iostream>
 #include <Windows.h>
 #include "SoftwareDefinitions.h"
 #include "resource.h"
 #include <commctrl.h>
+using namespace std;
 
 
 int APIENTRY wWinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPWSTR lpCmdLine, int nShowCmd) {
@@ -43,11 +44,13 @@ LRESULT CALLBACK SoftwareMainProcedure(HWND hWnd, UINT msg, WPARAM wp, LPARAM lp
 			break;
 		default: break;
 		}
+		break;
 	case WM_CREATE:
 		MainWndAddMenus(hWnd);
 		CommandToolbar(hWnd, ((LPCREATESTRUCT)lp)->hInstance);
 		break;
 	case WM_DESTROY:
+		DestroyMenu(GetMenu(hWnd));
 		PostQuitMessage(0);
 		break;
 	default: return DefWindowProc(hWnd, msg, wp, lp);
@@ -82,7 +85,7 @@ void MainWndAddMenus(HWND hWnd) {
 
 // Панель инструментов
 HWND CommandToolbar(HWND hWndParent, HINSTANCE hInst) {
-	HWND hWndToolbar = CreateWindowEx(0, TOOLBARCLASSNAME, NULL, WS_CHILD || TBSTYLE_WRAPABLE, 440, 200, 0, 0, hWndParent, NULL, hInst, NULL);
+	HWND hWndToolbar = CreateWindowEx(0, TOOLBARCLASSNAME, NULL, WS_CHILD | TBSTYLE_WRAPABLE, 0, 0, 0, 0, hWndParent, NULL, hInst, NULL);
 	
 	if (hWndToolbar == NULL) {
 		return NULL;
