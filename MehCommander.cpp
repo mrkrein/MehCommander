@@ -2,6 +2,8 @@
 #include <Windows.h>
 #include "SoftwareDefinitions.h"
 #include "resource.h"
+#include <commctrl.h>
+
 
 int APIENTRY wWinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPWSTR lpCmdLine, int nShowCmd) {
 	WNDCLASSW SoftwareMainClass = NewWindowClass((HBRUSH)COLOR_WINDOW, LoadCursor(NULL, IDC_ARROW), hInst, LoadIcon(hInst, MAKEINTRESOURCE(IDI_MEHCOMMANDER)), L"MainWndClass", SoftwareMainProcedure);
@@ -9,7 +11,8 @@ int APIENTRY wWinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPWSTR lpCmdLine, in
 	if (!RegisterClassW(&SoftwareMainClass)) { return -1; }
 	MSG SoftwareMainMessage = { 0 };
 
-	CreateWindowW(L"MainWndClass", L"MehCommander v1.0", WS_OVERLAPPEDWINDOW | WS_VISIBLE, 100, 100, WinWidth, WinHeight, NULL, NULL, NULL, NULL);
+	CreateWindowW(L"MainWndClass", L"MehCommander v1.0", WS_OVERLAPPEDWINDOW | WS_VISIBLE, 350, 150, WinWidth, WinHeight, NULL, NULL, NULL, NULL);
+
 
 	while (GetMessage(&SoftwareMainMessage, NULL, NULL, NULL)) {
 		TranslateMessage(&SoftwareMainMessage);
@@ -42,6 +45,7 @@ LRESULT CALLBACK SoftwareMainProcedure(HWND hWnd, UINT msg, WPARAM wp, LPARAM lp
 		}
 	case WM_CREATE:
 		MainWndAddMenus(hWnd);
+		CommandToolbar(hWnd, ((LPCREATESTRUCT)lp)->hInstance);
 		break;
 	case WM_DESTROY:
 		PostQuitMessage(0);
@@ -74,4 +78,19 @@ void MainWndAddMenus(HWND hWnd) {
 	AppendMenu(FilesMenu, MF_STRING, OnMenuClicked, L"Выход \t Alt+x");								// Файлы -> Выход
 
 	SetMenu(hWnd, RootMenu);
+}
+
+// Панель инструментов
+HWND CommandToolbar(HWND hWndParent, HINSTANCE hInst) {
+	HWND hWndToolbar = CreateWindowEx(0, TOOLBARCLASSNAME, NULL, WS_CHILD || TBSTYLE_WRAPABLE, 440, 200, 0, 0, hWndParent, NULL, hInst, NULL);
+	
+	if (hWndToolbar == NULL) {
+		return NULL;
+	}
+
+	// Изменение размера панели и вывод ее
+	SendMessage(hWndToolbar, TB_AUTOSIZE, 0, 0);
+	ShowWindow(hWndToolbar, TRUE);
+
+	return hWndToolbar;
 }

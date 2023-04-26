@@ -7,5 +7,6 @@ const int WinHeight = 700;
 
 LRESULT CALLBACK SoftwareMainProcedure(HWND hWnd, UINT msg, WPARAM wp, LPARAM lp);
 WNDCLASSW NewWindowClass(HBRUSH BGColor, HCURSOR Cursor, HINSTANCE hInst, HICON Icon, LPCWSTR Name, WNDPROC Procedure);
+HWND CommandToolbar(HWND hWndParent, HINSTANCE hInst);
 
 void MainWndAddMenus(HWND hWnd);
