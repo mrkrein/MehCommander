@@ -106,44 +106,37 @@ HWND CommandToolbar(HWND hWndParent, HINSTANCE hInst) {
 	const int bitmapSize = 16;
 
 	const DWORD buttonStyles = BTNS_AUTOSIZE;
-	const DWORD buttonSep = BTNS_BUTTON;
+	const DWORD buttonSep = BTNS_SEP;
 
-	HWND hWndToolbar = CreateWindowEx(0, TOOLBARCLASSNAME, NULL, WS_CHILD | TBSTYLE_WRAPABLE, 0, 0, 0, 0, hWndParent, NULL, hInst, NULL);
+	HWND hWndToolbar = CreateWindowEx(0, TOOLBARCLASSNAME, NULL, WS_CHILD | TBSTYLE_FLAT | TBSTYLE_WRAPABLE, 0, 0, 0, 0, hWndParent, NULL, hInst, NULL);
 	
 	if (hWndToolbar == NULL) {
 		return NULL;
 	}
 
-	// Создание списка иконок
+	// Создание списка иконок.
 	g_hImageList = ImageList_Create(bitmapSize, bitmapSize, ILC_COLOR16 | ILC_MASK, numButtons, 0);
 	if (g_hImageList == NULL) {
 		return NULL;
 	}
 
-	// Set the image list.
-	SendMessage(hWndToolbar, TB_SETIMAGELIST,
-		(WPARAM)ImageListID,
-		(LPARAM)g_hImageList);
+	// Установка списка иконок.
+	SendMessage(hWndToolbar, TB_SETIMAGELIST, (WPARAM)ImageListID, (LPARAM)g_hImageList);
 
-	// Load the button images.
-	SendMessage(hWndToolbar, TB_LOADIMAGES,
-		(WPARAM)IDB_STD_SMALL_COLOR,
-		(LPARAM)HINST_COMMCTRL);
-
-	// Initialize button info.
-	// IDM_NEW, IDM_OPEN, and IDM_SAVE are application-defined command constants.
+	// Загрузка изображений кнопок.
+	SendMessage(hWndToolbar, TB_LOADIMAGES, (WPARAM)IDB_STD_SMALL_COLOR, (LPARAM)HINST_COMMCTRL);
 
 	TBBUTTON tbButtons[numButtons] =
 	{
-		{ MAKELONG(STD_FILENEW,  ImageListID), OnMenuClicked ,  TBSTATE_ENABLED, buttonStyles, {0}, 0},
-		{ MAKELONG(STD_FILEOPEN, ImageListID), OnMenuClicked , TBSTATE_ENABLED, buttonStyles, {0}, 0},
-		{ MAKELONG(STD_FILESAVE, ImageListID), OnMenuClicked , TBSTATE_ENABLED,               buttonStyles, {0}, 0},
-		{ MAKELONG(STD_FILESAVE, ImageListID), OnMenuClicked , TBSTATE_ENABLED,               buttonSep, {0}, 0},
-		{ MAKELONG(STD_FILESAVE, ImageListID), OnMenuClicked , TBSTATE_ENABLED,               buttonStyles, {0}, 0},
-		{ MAKELONG(STD_FILESAVE, ImageListID), OnMenuClicked , 0,               buttonStyles, {0}, 0}
+		{ MAKELONG(STD_DELETE,  ImageListID), OnMenuClicked , TBSTATE_ENABLED, buttonStyles, {0}, 0},
+		{ MAKELONG(STD_FILENEW, ImageListID), OnMenuClicked , TBSTATE_ENABLED, buttonStyles, {0}, 0},
+		{ MAKELONG(STD_FILESAVE, ImageListID), OnMenuClicked , TBSTATE_ENABLED, buttonStyles, {0}, 0},
+		{ MAKELONG(STD_FILESAVE, ImageListID), OnMenuClicked , TBSTATE_ENABLED, buttonSep, {0}, 0},
+		{ MAKELONG(STD_FILESAVE, ImageListID), OnMenuClicked , TBSTATE_ENABLED, buttonStyles, {0}, 0},
+		{ MAKELONG(STD_FILESAVE, ImageListID), OnMenuClicked , 0, 0, {0}, 0}
 	};
 
-	// Add buttons.
+	// Добавление кнопок.
 	SendMessage(hWndToolbar, TB_BUTTONSTRUCTSIZE, (WPARAM)sizeof(TBBUTTON), 0);
 	SendMessage(hWndToolbar, TB_ADDBUTTONS, (WPARAM)numButtons, (LPARAM)& tbButtons);
 
