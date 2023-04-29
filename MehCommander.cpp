@@ -50,6 +50,7 @@ LRESULT CALLBACK SoftwareMainProcedure(HWND hWnd, UINT msg, WPARAM wp, LPARAM lp
 	case WM_CREATE:
 		MainWndAddMenus(hWnd);
 		CommandToolbar(hWnd, ((LPCREATESTRUCT)lp)->hInstance);
+		StatusBar(hWnd, ((LPCREATESTRUCT)lp)->hInstance);
 		break;
 	case WM_DESTROY:
 		DestroyMenu(GetMenu(hWnd));
@@ -108,14 +109,14 @@ HWND CommandToolbar(HWND hWndParent, HINSTANCE hInst) {
 	const DWORD buttonStyles = BTNS_AUTOSIZE;
 	const DWORD buttonSep = BTNS_SEP;
 
-	HWND hWndToolbar = CreateWindowEx(0, TOOLBARCLASSNAME, NULL, WS_CHILD | TBSTYLE_FLAT | TBSTYLE_WRAPABLE, 0, 0, 0, 0, hWndParent, NULL, hInst, NULL);
+	HWND hWndToolbar = CreateWindowEx(0, TOOLBARCLASSNAME, NULL, WS_CHILD | TBSTYLE_FLAT | TBSTYLE_TOOLTIPS, 0, 0, 0, 0, hWndParent, NULL, hInst, NULL);
 	
 	if (hWndToolbar == NULL) {
 		return NULL;
 	}
 
 	// Создание списка иконок.
-	g_hImageList = ImageList_Create(bitmapSize, bitmapSize, ILC_COLOR16 | ILC_MASK, numButtons, 0);
+	g_hImageList = ImageList_Create(bitmapSize, bitmapSize, ILC_COLOR32 | ILC_MASK, numButtons, 0);
 	if (g_hImageList == NULL) {
 		return NULL;
 	}
@@ -150,7 +151,22 @@ HWND CommandToolbar(HWND hWndParent, HINSTANCE hInst) {
 
 
 // Строка состояния (макросы)
+HWND StatusBar(HWND hWndParent, HINSTANCE hInst) {
+	HWND hStatusWnd = CreateWindowEx(0, STATUSCLASSNAME, NULL, WS_CHILD | WS_VISIBLE, 0, 0, 0, 0, hWndParent, NULL, hInst, NULL);
+	int widths[] = { 150, 300, 450, 600, 750, 900, 1050, -1, };
+	SendMessage(hStatusWnd, SB_SETPARTS, 8, (LPARAM)widths);
 
+	SendMessage(hStatusWnd, SB_SETTEXT, 0, (LPARAM)L"F3 Просмотр"); 
+	SendMessage(hStatusWnd, SB_SETTEXT, 1, (LPARAM)L"F4 Правка");
+	SendMessage(hStatusWnd, SB_SETTEXT, 2, (LPARAM)L"F5 Копирование");
+	SendMessage(hStatusWnd, SB_SETTEXT, 3, (LPARAM)L"F6 Перемещение");
+	SendMessage(hStatusWnd, SB_SETTEXT, 4, (LPARAM)L"F7 Каталог");
+	SendMessage(hStatusWnd, SB_SETTEXT, 5, (LPARAM)L"F8 Удаление");
+	SendMessage(hStatusWnd, SB_SETTEXT, 6, (LPARAM)L"F9 Терминал");
+	SendMessage(hStatusWnd, SB_SETTEXT, 7, (LPARAM)L"Alt+F4 Выход");
+	return hStatusWnd;
+}
+ 
 
 /*
 
