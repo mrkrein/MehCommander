@@ -21,6 +21,7 @@ int APIENTRY wWinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPWSTR lpCmdLine, in
 		TranslateMessage(&SoftwareMainMessage);
 		DispatchMessageW(&SoftwareMainMessage);
 	}
+
 	return 0;
 }
 
@@ -37,6 +38,7 @@ WNDCLASSW NewWindowClass(HBRUSH BGColor, HCURSOR Cursor, HINSTANCE hInst, HICON 
 	return NWC;
 }
 
+
 LRESULT CALLBACK SoftwareMainProcedure(HWND hWnd, UINT msg, WPARAM wp, LPARAM lp) {
 	switch (msg) {
 	case WM_COMMAND:
@@ -51,6 +53,7 @@ LRESULT CALLBACK SoftwareMainProcedure(HWND hWnd, UINT msg, WPARAM wp, LPARAM lp
 		MainWndAddMenus(hWnd);
 		CommandToolbar(hWnd, ((LPCREATESTRUCT)lp)->hInstance);
 		StatusBar(hWnd, ((LPCREATESTRUCT)lp)->hInstance);
+		TextOutFunc(hWnd, ((LPCREATESTRUCT)lp)->hInstance);
 		break;
 	case WM_DESTROY:
 		DestroyMenu(GetMenu(hWnd));
@@ -59,6 +62,7 @@ LRESULT CALLBACK SoftwareMainProcedure(HWND hWnd, UINT msg, WPARAM wp, LPARAM lp
 	default: return DefWindowProc(hWnd, msg, wp, lp);
 	}
 }
+
 
 void MainWndAddMenus(HWND hWnd) {
 	HMENU RootMenu = CreateMenu();
@@ -146,27 +150,53 @@ HWND CommandToolbar(HWND hWndParent, HINSTANCE hInst) {
 	SendMessage(hWndToolbar, TB_AUTOSIZE, 0, 0);
 	ShowWindow(hWndToolbar, TRUE);
 
+
 	return hWndToolbar;
 }
+
+
+// Создание рабочей области (Основное окно)
+
+
 
 
 // Строка состояния (макросы)
 HWND StatusBar(HWND hWndParent, HINSTANCE hInst) {
 	HWND hStatusWnd = CreateWindowEx(0, STATUSCLASSNAME, NULL, WS_CHILD | WS_VISIBLE, 0, 0, 0, 0, hWndParent, NULL, hInst, NULL);
-	int widths[] = { 150, 300, 450, 600, 750, 900, 1050, -1, };
+
+	int widths[] = { 150, 300, 450, 600, 750, 900, 1050, 1200, }; // ? мб функцию бахнуть xD
 	SendMessage(hStatusWnd, SB_SETPARTS, 8, (LPARAM)widths);
 
-	SendMessage(hStatusWnd, SB_SETTEXT, 0, (LPARAM)L"F3 Просмотр"); 
-	SendMessage(hStatusWnd, SB_SETTEXT, 1, (LPARAM)L"F4 Правка");
-	SendMessage(hStatusWnd, SB_SETTEXT, 2, (LPARAM)L"F5 Копирование");
-	SendMessage(hStatusWnd, SB_SETTEXT, 3, (LPARAM)L"F6 Перемещение");
-	SendMessage(hStatusWnd, SB_SETTEXT, 4, (LPARAM)L"F7 Каталог");
-	SendMessage(hStatusWnd, SB_SETTEXT, 5, (LPARAM)L"F8 Удаление");
-	SendMessage(hStatusWnd, SB_SETTEXT, 6, (LPARAM)L"F9 Терминал");
-	SendMessage(hStatusWnd, SB_SETTEXT, 7, (LPARAM)L"Alt+F4 Выход");
+	SendMessage(hStatusWnd, SB_SETTEXT, 0, (LPARAM)L"\tF3 Просмотр"); 
+	SendMessage(hStatusWnd, SB_SETTEXT, 1, (LPARAM)L"\tF4 Правка");
+	SendMessage(hStatusWnd, SB_SETTEXT, 2, (LPARAM)L"\tF5 Копирование");
+	SendMessage(hStatusWnd, SB_SETTEXT, 3, (LPARAM)L"\tF6 Перемещение");
+	SendMessage(hStatusWnd, SB_SETTEXT, 4, (LPARAM)L"\tF7 Каталог");
+	SendMessage(hStatusWnd, SB_SETTEXT, 5, (LPARAM)L"\tF8 Удаление");
+	SendMessage(hStatusWnd, SB_SETTEXT, 6, (LPARAM)L"\tF9 Терминал");
+	SendMessage(hStatusWnd, SB_SETTEXT, 7, (LPARAM)L"\tAlt+F4 Выход");
+	
 	return hStatusWnd;
 }
  
+
+// Вывод текста на экран
+HWND TextOutFunc(HWND hWndParent, HINSTANCE hInst) {
+	HWND hStaticText = CreateWindowEx(0, L"STATIC", L"Йоу, хелло мир, body4 крутит мир.\n Мне стало впадлу делать вывод списка файлов и поэтому я просто сделал вывод текста на экран в родительское окно.",
+		WS_CHILD | WS_VISIBLE | SS_LEFT,
+		30, 30, 300, 200, hWndParent, NULL, hInst, NULL);
+
+	// Изменение шрифта
+	HFONT hFont = CreateFont(20, 0, 0, 0, FW_NORMAL, FALSE, FALSE, FALSE, DEFAULT_CHARSET,
+		OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS, DEFAULT_QUALITY,
+		DEFAULT_PITCH | FF_DONTCARE, L"Calibri");
+	if (hFont != NULL)
+	{
+		SendMessage(hStaticText, WM_SETFONT, (WPARAM)hFont, TRUE);
+	}
+
+	return hStaticText;
+}
 
 /*
 
